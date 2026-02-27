@@ -111,15 +111,14 @@ function downloadPNG() {
         ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
 
         // Draw name
-        ctx.font = "38px 'Tiro Devanagari Marathi'";
+         ctx.font = "38px 'Tiro Devanagari Marathi'";
         ctx.fillStyle = "#7a1f1f";
         ctx.textAlign = "center";
         ctx.fillText(
-        document.getElementById("certName").innerText,
-        canvas.width / 2,
-        505   // ⬅ moved UP to sit above the golden line
+            document.getElementById("certName").innerText,
+            canvas.width / 2,
+            540
         );
-
         // Download
         const link = document.createElement("a");
         link.download = "certificate.png";
