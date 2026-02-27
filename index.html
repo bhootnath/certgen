@@ -1,4 +1,22 @@
-<!DOCTYPE html>
+<!DOCTYPE html><html lang="mr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Certificate Generator</title><link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Marathi&display=swap" rel="stylesheet"><style>
+body{margin:0;font-family:"Tiro Devanagari Marathi",serif;background:#f2f2f2;text-align:center}
+.form-box{margin:20px auto;padding:20px;max-width:420px;background:#fff;border-radius:12px;box-shadow:0 0 15px rgba(0,0,0,.15)}
+input{width:95%;padding:14px;font-size:16px;border-radius:10px;border:1px solid #ccc}
+button{margin:12px 6px;padding:14px 28px;font-size:18px;border-radius:10px;border:none;background:#d6a53a;cursor:pointer;touch-action:manipulation}
+.certificate-container{width:100%;max-width:1123px;margin:20px auto}
+.certificate{width:100%;aspect-ratio:1123/794;background:url("baseimage.png") no-repeat center/cover;position:relative;display:none}
+.cert-name{position:absolute;top:63.5%;left:50%;transform:translateX(-50%);font-size:clamp(18px,3.5vw,38px);color:#7a1f1f;white-space:nowrap}
+</style></head><body>
+<div class="form-box"><h2>प्रमाणपत्र तयार करा</h2><input id="name" placeholder="पूर्ण नाव लिहा"><br><button onclick="g()">Generate Certificate</button><button id="d" onclick="p()" style="display:none">Download PNG</button></div>
+<div class="certificate-container"><div class="certificate" id="c"><div class="cert-name" id="n"></div></div></div>
+<canvas id="cv" width="1123" height="794" style="display:none"></canvas>
+<script>
+const W=1123,H=794,G=520,O=15;
+function g(){const e=name.value.trim();if(!e)return alert("कृपया नाव प्रविष्ट करा");n.innerText=e;c.style.display="block";d.style.display="inline-block"}
+function f(t,x,y){let s=38;for(;s>20;s--){ctx.font=s+"px 'Tiro Devanagari Marathi'";if(ctx.measureText(t).width<=900)break}ctx.textAlign="center";ctx.fillStyle="#7a1f1f";ctx.fillText(t,x,y)}
+function p(){const cv=document.getElementById("cv");ctx=cv.getContext("2d");const i=new Image;i.src="baseimage.png";i.onload=()=>{ctx.clearRect(0,0,W,H);ctx.drawImage(i,0,0,W,H);f(n.innerText,W/2,G-O);const a=document.createElement("a");a.download="certificate.png";a.href=cv.toDataURL("image/png");a.click()}}
+</script>
+</body></html><!DOCTYPE html>
 <html lang="mr">
 <head>
 <meta charset="UTF-8">
