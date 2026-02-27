@@ -56,7 +56,7 @@ button {
 /* PERFECT NAME PLACEMENT */
 .cert-name {
     position: absolute;
-    top: 600px;          /* adjust if needed */
+    top: 465px;          /* adjust if needed */
     width: 100%;
     text-align: center;
     font-size: 38px;
@@ -115,9 +115,10 @@ function downloadPNG() {
         ctx.fillStyle = "#7a1f1f";
         ctx.textAlign = "center";
         ctx.fillText(
-            document.getElementById("certName").innerText,
-            480,
-            400
+        document.getElementById("certName").innerText,
+        canvas.width / 2,
+        505   // ⬅ moved UP to sit above the golden line
+);
         );
 
         // Download
