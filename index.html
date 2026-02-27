@@ -2,6 +2,174 @@
 <html lang="mr">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Certificate Generator</title>
+
+<!-- Marathi Calligraphy Font -->
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Marathi&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    font-family: "Tiro Devanagari Marathi", serif;
+    background: #f2f2f2;
+    text-align: center;
+}
+
+/* ===== FORM (Touch Friendly) ===== */
+.form-box {
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 420px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.15);
+}
+
+.form-box h2 {
+    margin-bottom: 15px;
+}
+
+input {
+    width: 95%;
+    padding: 14px;
+    font-size: 16px; /* prevents iOS zoom */
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+button {
+    margin: 12px 6px;
+    padding: 14px 28px;
+    font-size: 18px;
+    border-radius: 10px;
+    border: none;
+    background: #d6a53a;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+/* ===== RESPONSIVE CERTIFICATE PREVIEW ===== */
+.certificate-container {
+    width: 100%;
+    max-width: 1123px;
+    margin: 20px auto;
+}
+
+.certificate {
+    width: 100%;
+    aspect-ratio: 1123 / 794;
+    background: url("baseimage.png") no-repeat center;
+    background-size: cover;
+    position: relative;
+    display: none;
+}
+
+/* Name above golden line (responsive) */
+.cert-name {
+    position: absolute;
+    top: 63.5%; /* visually aligned above golden line */
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: clamp(18px, 3.5vw, 38px);
+    color: #7a1f1f;
+    white-space: nowrap;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== INPUT FORM ===== -->
+<div class="form-box">
+    <h2>प्रमाणपत्र तयार करा</h2>
+    <input type="text" id="name" placeholder="पूर्ण नाव लिहा">
+    <br>
+    <button onclick="generate()">Generate Certificate</button>
+    <button onclick="downloadPNG()" id="downloadBtn" style="display:none;">
+        Download PNG
+    </button>
+</div>
+
+<!-- ===== CERTIFICATE PREVIEW ===== -->
+<div class="certificate-container">
+    <div class="certificate" id="certificate">
+        <div class="cert-name" id="certName"></div>
+    </div>
+</div>
+
+<!-- ===== HIDDEN CANVAS (FOR PNG) ===== -->
+<canvas id="canvas" width="1123" height="794" style="display:none;"></canvas>
+
+<script>
+/* ===== CONFIG ===== */
+const CANVAS_WIDTH = 1123;
+const CANVAS_HEIGHT = 794;
+const GOLDEN_LINE_Y = 520;  // detected once from image
+const NAME_OFFSET = 15;     // distance above golden line
+
+/* ===== GENERATE PREVIEW ===== */
+function generate() {
+    const name = document.getElementById("name").value.trim();
+    if (!name) {
+        alert("कृपया नाव प्रविष्ट करा");
+        return;
+    }
+
+    document.getElementById("certName").innerText = name;
+    document.getElementById("certificate").style.display = "block";
+    document.getElementById("downloadBtn").style.display = "inline-block";
+}
+
+/* ===== AUTO-FIT NAME DRAWING ===== */
+function drawNameAutoFit(ctx, text, centerX, baseY) {
+    let fontSize = 38;
+    const minFontSize = 20;
+    const maxWidth = 900;
+
+    do {
+        ctx.font = `${fontSize}px 'Tiro Devanagari Marathi'`;
+        if (ctx.measureText(text).width <= maxWidth) break;
+        fontSize--;
+    } while (fontSize > minFontSize);
+
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#7a1f1f";
+    ctx.fillText(text, centerX, baseY);
+}
+
+/* ===== DOWNLOAD PNG ===== */
+function downloadPNG() {
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    const bg = new Image();
+    bg.src = "baseimage.png";
+
+    bg.onload = () => {
+        ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        ctx.drawImage(bg, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+        drawNameAutoFit(
+            ctx,
+            document.getElementById("certName").innerText,
+            CANVAS_WIDTH / 2,
+            GOLDEN_LINE_Y - NAME_OFFSET
+        );
+
+        const link = document.createElement("a");
+        link.download = "certificate.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+    };
+}
+</script>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8">
 <title>Certificate Generator</title>
 
 <!-- Marathi Calligraphy Font -->
